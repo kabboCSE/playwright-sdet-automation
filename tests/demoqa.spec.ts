@@ -12,12 +12,12 @@ import { generateRandomNumber } from "../utils/utils.ts";
 import { faker } from '@faker-js/faker';
 import path from "path";
 
-test("Create new user", async ({ page }) => {
+test.only("Create new user", async ({ page }) => {
   await page.goto("https://demoqa.com/text-box");
   await page.getByRole("textbox", { name: "Full Name" }).fill(faker.person.fullName());
-  await page.getByPlaceholder("name@example.com").fill(`salmansrabon+${generateRandomNumber(1000,9999)}@gmail.com`)
+  await page.getByPlaceholder("name@example.com").fill(`shahriarkabbo+${generateRandomNumber(1000,9999)}@gmail.com`)
   await page.getByRole("button", { name: "Submit" }).click();
-  //await page.pause();
+  await page.pause();
 });
 
 test("button click", async ({ page }) => {
