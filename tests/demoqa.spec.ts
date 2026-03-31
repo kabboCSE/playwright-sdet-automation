@@ -12,7 +12,7 @@ import { generateRandomNumber } from "../utils/utils.ts";
 import { faker } from '@faker-js/faker';
 import path from "path";
 
-test.only("Create new user", async ({ page }) => {
+test("Create new user", async ({ page }) => {
   await page.goto("https://demoqa.com/text-box");
   await page.getByRole("textbox", { name: "Full Name" }).fill(faker.person.fullName());
   await page.getByPlaceholder("name@example.com").fill(`shahriarkabbo+${generateRandomNumber(1000,9999)}@gmail.com`)
@@ -30,4 +30,12 @@ test("button click", async ({ page }) => {
     "You have done a double click"
   );
 });
+
+test.only("double click", async ({page})=>{
+    await page.goto("https://demoqa.com/buttons");
+    await page.getByRole("button",{name: "Double Click Me" }).dblclick();
+    const txtActual = await page.getByText("double click").nth(1).textContent(); // Double click message appears twice in the DOM; nth(1) returns the 2nd matching element (0-indexed), allowing us to retrieve the actual result message
+    expect (txtActual).toContain("You have done a double click")
+    await page.pause();
+})
 
