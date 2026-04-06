@@ -31,7 +31,7 @@ test("button click", async ({ page }) => {
   );
 });
 
-test.only("double click", async ({page})=>{
+test("double click", async ({page})=>{
     await page.goto("https://demoqa.com/buttons");
     await page.getByRole("button",{name: "Double Click Me" }).dblclick();   
     const txtActual = await page.getByText("double click").nth(1).textContent(); // Double click message appears twice in the DOM; nth(1) returns the 2nd matching element (0-indexed), allowing us to retrieve the actual result message
@@ -46,5 +46,11 @@ test.only("double click", async ({page})=>{
 
     await page.pause();
 });
+
+test.only("handle alert",async({page})=>{
+  
+  await page.goto("https://demoqa.com/alerts");
+  await page.getByRole("button",{name: "Click me"}).first().click
+})
 
 
