@@ -47,10 +47,39 @@ test("double click", async ({page})=>{
     await page.pause();
 });
 
-test.only("handle alert",async({page})=>{
-  
+
+// Handle Alert
+test("handle alert",async({page})=>{  
   await page.goto("https://demoqa.com/alerts");
-  await page.getByRole("button",{name: "Click me"}).first().click
+  page.on("dialog", async(dialog)=>{
+    console.log("Message", dialog.message());
+    await dialog.accept();
+
+  })
+  await page.getByRole("button",{name: "Click me"}).first().click();
+  await page.getByRole("button",{name: "Click me"}).nth(1).click();
+   await page.pause();
+})
+
+// Form Submisson
+test("Form submisson", async({page})=>{
+ await page.goto("https://demoqa.com/text-box");
+ await page.getByPlaceholder("Full Name").fill("Test Full Name");
+ await page.getByPlaceholder("name@example.com").fill("kabbo@ibos.io");
+ await page.locator("#currentAddress").fill("Bogura");
+ await page.getByRole("textbox",{exact:true}).nth(3).fill("Mokamtola");
+ await page.locator("#submit").click();
+ await page.pause();
+
+})
+
+//Manual Scroll
+test.only("Manual scroll", async({page})=>{
+   await page.goto("https://demoqa.com/text-box");
+   await page.evaluate(()=>{
+    window.scrollTo(0,600);
+   })
+   await page.pause();
 })
 
 
