@@ -67,14 +67,14 @@ test("Form submisson", async({page})=>{
  await page.getByPlaceholder("Full Name").fill("Test Full Name");
  await page.getByPlaceholder("name@example.com").fill("kabbo@ibos.io");
  await page.locator("#currentAddress").fill("Bogura");
- await page.getByRole("textbox",{exact:true}).nth(3).fill("Mokamtola");
+ await page.getByRole("textbox",{exact:true}).nth(3).fill("Mokamtola"); //if there are no Name filed in accessbility, then if there are textbox remains mulitple textbox then have to use nth()
  await page.locator("#submit").click();
  await page.pause();
 
 })
 
 //Manual Scroll
-test.only("Manual scroll", async({page})=>{
+test("Manual scroll", async({page})=>{
    await page.goto("https://demoqa.com/text-box");
    await page.evaluate(()=>{
     window.scrollTo(0,600);
@@ -82,4 +82,16 @@ test.only("Manual scroll", async({page})=>{
    await page.pause();
 })
 
+
+// Tab Handling
+
+test.only("Tab handling",async({page, context})=>{
+    await page.goto("https://demoqa.com/browser-windows");
+    const pagePromise = context.waitForEvent('page');
+    await page.getByRole("button",{name: "New Tab"}).click();
+    const newPage =  await pagePromise;
+    const txtActual = await newPage.getByText("sample page").textContent();
+    console.log(txtActual);
+    await page.pause();
+})
 
