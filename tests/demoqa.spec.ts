@@ -10,7 +10,7 @@ test('has title', async ({ page }) => {
 
 import { generateRandomNumber } from "../utils/utils.ts";
 import { faker } from '@faker-js/faker';
-import path from "path";
+
 
 test("Create new user", async ({ page }) => {
   await page.goto("https://demoqa.com/text-box");
@@ -85,13 +85,32 @@ test("Manual scroll", async({page})=>{
 
 // Tab Handling
 
-test.only("Tab handling",async({page, context})=>{
+test("Tab handling",async({page, context})=>{
     await page.goto("https://demoqa.com/browser-windows");
     const pagePromise = context.waitForEvent('page');
     await page.getByRole("button",{name: "New Tab"}).click();
     const newPage =  await pagePromise;
     const txtActual = await newPage.getByText("sample page").textContent();
     console.log(txtActual);
+    await newPage.close();
+    await page.waitForTimeout(2000);
+    await page.getByRole("button",{name: "New Tab"}).click();
     await page.pause();
+})
+
+// Window Handling
+
+test.only("Window Handling", async({page})=>{
+    await page.goto("https://demoqa.com/browser-windows");
+    const popupPromise = page.waitForEvent('popup');
+    await page.getByRole("button",{name: "New Window"}).nth(0).click();
+    const popupPage = await popupPromise;
+    const txtActual = await popupPage.getByText("sample page").textContent();
+    console.log("Window popup text : ",txtActual);
+    await popupPage.close();
+    await page.waitForTimeout(2000);
+    await page.getByRole("button",{name: "New Window"}).nth(0).click();
+    await page.pause();
+
 })
 
