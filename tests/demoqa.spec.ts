@@ -100,7 +100,7 @@ test("Tab handling",async({page, context})=>{
 
 // Window Handling
 
-test.only("Window Handling", async({page})=>{
+test("Window Handling", async({page})=>{
     await page.goto("https://demoqa.com/browser-windows");
     const popupPromise = page.waitForEvent('popup');
     await page.getByRole("button",{name: "New Window"}).nth(0).click();
@@ -111,6 +111,25 @@ test.only("Window Handling", async({page})=>{
     await page.waitForTimeout(2000);
     await page.getByRole("button",{name: "New Window"}).nth(0).click();
     await page.pause();
-
 })
+// Dropdown handling
+test("Dropdown Handling",async({page})=>{
+  await page.goto("https://demoqa.com/select-menu");
+  await page.getByRole("combobox", {exact: true}).nth(2).selectOption({label: "Black"});
+  await page.waitForTimeout(2000);
+  await page.getByRole("combobox", {exact: true}).nth(2).selectOption({label: "White"});
+  await page.waitForTimeout(2000);
+  await page.pause();
+})
+
+// Select Dynamic Dropdown
+test.only("Dynamic Dropdown", async({page})=>{
+await page.goto("https://demoqa.com/select-menu");
+await page.locator("#withOptGroup").click();
+await page.waitForTimeout(4000);
+await page.locator("#react-select-2-input").press("Enter");
+await page.pause();
+})
+
+
 
