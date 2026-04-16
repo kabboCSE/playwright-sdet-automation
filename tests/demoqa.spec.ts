@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import * as path from 'path';
 test('has title', async ({ page }) => {
   await page.goto('https://demoqa.com/', {timeout: 2000});
   // timeout = navigation timeout
@@ -8,7 +9,7 @@ test('has title', async ({ page }) => {
   await expect(page).toHaveTitle(/demositeee/);
 });
 
-import { generateRandomNumber } from "../utils/utils.ts";
+import { generateRandomNumber } from "../utils/utils";
 import { faker } from '@faker-js/faker';
 
 
@@ -123,13 +124,73 @@ test("Dropdown Handling",async({page})=>{
 })
 
 // Select Dynamic Dropdown
-test.only("Dynamic Dropdown", async({page})=>{
+test("Dynamic Dropdown", async({page})=>{
 await page.goto("https://demoqa.com/select-menu");
 await page.locator("#withOptGroup").click();
-await page.waitForTimeout(4000);
-await page.locator("#react-select-2-input").press("Enter");
+// await page.waitForTimeout(4000);
+
+  await page.getByRole('option', { name: 'A root option' }).click();
+// await page.locator("#react-select-2-input").press("ArrowDown");
+// await page.locator("#react-select-2-input").press("Enter");
+
 await page.pause();
 })
 
+//Upload Files
+test("Upload Files", async({page})=>{
+  await page.goto("https://demoqa.com/upload-download");
+  const filepath = path.join(process.cwd(), 'resources', 'stream.webp');
+  await page.locator('#uploadFile').setInputFiles(filepath);
+  await page.pause();
+});
+
+// Read Table Data
+// test.only("Scrap table data", async ({ page }) => {
+//   await page.goto("https://demoqa.com/webtables");
+//   const tableTexts = await page.locator(".rt-tbody .rt-td").allInnerTexts();
+//   console.log("data",tableTexts);
+//   await page.pause();
+// });
 
 
+// test.only("Scrap table data", async ({ page }) => {
+//   await page.goto("https://demoqa.com/webtables");
+//   await page.waitForTimeout(3000);
+
+//   const rows = await page.locator("table tbody tr").all();
+
+//   for (const row of rows) {
+//     const cells = await row.locator("td").allInnerTexts();
+//     if (cells.every(cell => cell.trim() === "")) continue;
+//     console.log(cells);
+//   }
+
+//   await page.pause();
+// });
+
+test.only("Scrap table data", async ({ page }) => {
+  await page.goto("https://tablepress.org/demo");
+  await page.waitForTimeout(3000);
+
+  // Header গুলো নিন
+  const headers = await page.locator("table thead tr th").allInnerTexts();
+  console.log("Headers:", headers);
+
+  // Row গুলো নিন
+  const rows = await page.locator("table tbody tr").all();
+
+  for (const row of rows) {
+    const cells = await row.locator("td").allInnerTexts();
+    if (cells.every(cell => cell.trim() === "")) continue;
+
+    // Header + Cell মিলিয়ে object বানান
+    const rowData: Record<string, string> = {};
+    headers.forEach((header, index) => {
+      rowData[header] = cells[index];
+    });
+
+    console.table(rowData);
+  }
+
+  await page.pause();
+});
